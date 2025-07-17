@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Autocomplete Search Engine</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+
+        h2 {
+            color: #555555;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        form {
+            margin: 20px 0;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            color: green;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Autocomplete Search Engine</h1>
+
+        <h2>Insert a Word</h2>
+        <form method="POST" action="/">
+            <input type="text" name="word" placeholder="Enter word to insert" required>
+            <button type="submit">Insert</button>
+        </form>
+        <p>{{ message }}</p>
+
+        <h2>Get Top-K Suggestions</h2>
+        <form method="POST" action="/suggestions">
+            <input type="text" name="prefix" placeholder="Enter prefix" required>
+            <input type="number" name="k" placeholder="Enter k" required>
+            <button type="submit">Get Suggestions</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Hema Sri | Autocomplete Project
+    </div>
+</body>
+</html>
