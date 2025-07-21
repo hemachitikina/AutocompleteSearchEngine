@@ -2,28 +2,14 @@ import heapq
 from pymongo import MongoClient
 from urllib.parse import quote_plus
 
-# =======================
-# 🔧 MongoDB connection setup
-# =======================
-
-# Credentials
 username = "hemauser"
 password = "Hemadb@123"
-
-# URL encode password to avoid InvalidURI error
 password_encoded = quote_plus(password)
-
-# Your cluster connection string
 connection_string = f"mongodb+srv://{username}:{password_encoded}@autocompletesearchengin.30cwosr.mongodb.net/?retryWrites=true&w=majority&appName=autocompletesearchengine"
 
-# Connect to MongoDB
 client = MongoClient(connection_string)
 db = client['AutocompleteDB']
 collection = db['words']
-
-# =======================
-# 📌 Trie Data Structure
-# =======================
 
 class TrieNode:
     def __init__(self):
@@ -34,8 +20,17 @@ class TrieNode:
 class Trie:
     def __init__(self):
         self.root = TrieNode()
+        self.load_from_db()
 
-    def insert(self, word):
+    def load_from_db(self):
+        existing_words = collection.find()
+        for doc in existing_words:
+            word = doc['word']
+            freq = doc['frequency']
+            for _ in range(freq):
+                self.insert(word, db_update=False)
+
+    def insert(self, word, db_update=True):
         current = self.root
         for char in word:
             if char not in current.children:
@@ -45,11 +40,12 @@ class Trie:
         current.frequency += 1
 
         # Insert or update word in MongoDB
-        existing = collection.find_one({'word': word})
-        if existing:
-            collection.update_one({'word': word}, {'$inc': {'frequency': 1}})
-        else:
-            collection.insert_one({'word': word, 'frequency': 1})
+        if db_update:
+            existing = collection.find_one({'word': word})
+            if existing:
+                collection.update_one({'word': word}, {'$inc': {'frequency': 1}})
+            else:
+                collection.insert_one({'word': word, 'frequency': 1})
 
     def search(self, word):
         current = self.root
@@ -84,7 +80,6 @@ class Trie:
             if freq_in_db:
                 suggestions[i] = (word, freq_in_db['frequency'])
 
-        # Return top k by frequency
         top_k = heapq.nlargest(k, suggestions, key=lambda x: x[1])
         return [word for word, freq in top_k]
 
@@ -94,20 +89,8 @@ class Trie:
         for char, next_node in node.children.items():
             self._dfs(next_node, path + char, suggestions)
 
-# =======================
-# 🚀 Main Program
-# =======================
-
 if __name__ == "__main__":
     trie = Trie()
-
-    # Load existing words from MongoDB into Trie on start
-    existing_words = collection.find()
-    for doc in existing_words:
-        word = doc['word']
-        freq = doc['frequency']
-        for _ in range(freq):
-            trie.insert(word)
 
     while True:
         print("\n🔍 === Autocomplete Search Engine Menu ===")
