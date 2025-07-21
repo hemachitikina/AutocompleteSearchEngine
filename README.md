@@ -118,7 +118,7 @@ This project implements an **Autocomplete Search Engine** using **Flask**, **Mon
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/AutocompleteSearchEngine.git
+git clone https://github.com/hemachitikina/AutocompleteSearchEngine.git
 cd AutocompleteSearchEngine
 Install dependencies
 
@@ -165,5 +165,5 @@ The MongoDB connection uses MongoDB Atlas with a username and password.
 Ensure your IP whitelist and connection string are properly configured on MongoDB Atlas to run this project locally or in production.
 
 ✨ Contact
-🔗 LinkedIn: Your Name
-📧 Email: your.email@example.com
+🔗 LinkedIn: https://www.linkedin.com/in/hema-sri-chitikina-226686250/
+📧 Email: hemasrichitikina123@gmail.com
